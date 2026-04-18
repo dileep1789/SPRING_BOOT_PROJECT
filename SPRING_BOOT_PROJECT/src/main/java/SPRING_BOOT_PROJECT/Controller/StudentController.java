@@ -1,30 +1,41 @@
 package SPRING_BOOT_PROJECT.Controller;
 
+import SPRING_BOOT_PROJECT.dto.AddStudentRequestDto;
 import SPRING_BOOT_PROJECT.dto.StudentDto;
 import SPRING_BOOT_PROJECT.entity.Student;
 import SPRING_BOOT_PROJECT.repository.StudentRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import SPRING_BOOT_PROJECT.service.StudentService;
+import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentRepository studentRepositoty;
+    private final StudentService studentService;
 
-    public StudentController(StudentRepository studentRepositoty) {
-        this.studentRepositoty = studentRepositoty;
+
+
+    @GetMapping("/students")
+    public ResponseEntity<StudentDto> getStudent(){
+//        return studentService.getAllStudents();
+        return ResponseEntity.ok((StudentDto) studentService.getAllStudents());
+
     }
 
-    @GetMapping("/student")
-    public List<Student> getStudent(){
-        return studentRepositoty.findAll();
+    @GetMapping("/students/{id}")
+    public ResponseEntity<StudentDto> getStudentById(@PathVariable Long id) {
+        return ResponseEntity.ok(studentService.getStudentById(id));
     }
 
-    @GetMapping("/student/{id}")
-    public StudentDto getStudentById(){
-        return new StudentDto(4l,"AYUSH","ayush@gmail.com");
+    @PostMapping
+    public ResponseEntity<StudentDto> createNewStudent(@RequestBody AddStudentRequestDto addStudentRequestDto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(studentService.createNewStudent(addStudentRequestDto));
     }
 
 
