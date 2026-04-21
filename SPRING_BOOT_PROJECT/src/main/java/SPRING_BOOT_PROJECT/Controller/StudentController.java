@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,5 +43,15 @@ public class StudentController {
         studentService.deleteStudentById(id);
         return ResponseEntity.noContent().build();
 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<StudentDto> updateStudent(@PathVariable Long id , @RequestBody AddStudentRequestDto addStudentRequestDto) {
+        return ResponseEntity.ok(studentService.updateStudent(id, addStudentRequestDto));
+    }
+
+    @PatchMapping("/id")
+    public ResponseEntity<StudentDto> updatePartialStudent(@PathVariable Long id, @RequestBody Map<String,Object> update){
+        return ResponseEntity.ok(studentService.updatePartialStudent(id,update));
     }
 }
