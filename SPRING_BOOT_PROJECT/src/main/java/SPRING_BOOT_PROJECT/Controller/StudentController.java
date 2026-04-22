@@ -51,7 +51,7 @@ public class StudentController {
     }
 
     @PatchMapping("/id")
-    public ResponseEntity<StudentDto> updatePartialStudent(@PathVariable Long id, @RequestBody Map<String,Object> update){
-        return ResponseEntity.ok(studentService.updatePartialStudent(id,update));
+    public ResponseEntity<StudentDto> updatePartialStudent(@PathVariable Long id, @RequestBody Map<String,Object> updates){
+        return ResponseEntity.ok(studentService.updatePartialStudent(id,updates));
     }
 }
