@@ -66,15 +66,29 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto updatePartialStudent(Long id, Map<String, Object> updates) {
+
         Student student = studentRepository.findById(id)
-                .orElseThrow( () -> new IllegalArgumentException("student not found with id " +id));
-        updates.forEach((field,value) ->{
-            switch (field){
-                case "name":student.setName((String) value);
-                case "email":student.getEmail((String)value);
-                default:throw new IllegalArgumentException("field is not supported");
+                .orElseThrow(() ->
+                        new IllegalArgumentException("student not found with id " + id));
+
+        for (Map.Entry<String, Object> entry : updates.entrySet()) {
+            String field = entry.getKey();
+            Object value = entry.getValue();
+            switch (field) {
+
+                case "name":
+                    student.setName((String) value);
+                    break;
+
+                case "email":
+                    student.setEmail((String) value);
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Field is not supported: " + field);
             }
-        });
+        }
+
         Student savedStudent = studentRepository.save(student);
         return modelMapper.map(savedStudent, StudentDto.class);
     }
